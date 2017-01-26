@@ -125,7 +125,11 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         input.setAttribute('type', "checkbox");
         input.setAttribute('name', input_id_name);
         input.setAttribute('value', trial.options[i][j])
+<<<<<<< HEAD
         label.prepend(input);
+=======
+        form.appendChild(input);
+>>>>>>> 747cad0... multi select plug in double quoted string no value issue fixed
         form.appendChild(label)
         // var input_id_name = _join(plugin_id_name, 'response', i);
         // display_element.querySelector(option_id_selector + " label").innerHTML =
