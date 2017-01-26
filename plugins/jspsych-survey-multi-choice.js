@@ -126,7 +126,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         input.setAttribute('name', input_id_name);
         input.setAttribute('value', trial.options[i][j])
         label.prepend(input);
-        form.appendChild(label)
+        form.appendChild(input);
         // display_element.querySelector(option_id_selector + " label").innerHTML =
         //   '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
         //   display_element.querySelector(option_id_selector + " label").innerHTML;
