@@ -152,7 +152,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         obje[id] = val;
         Object.assign(question_data, obje);
       })
-      if(!val.length) {
+      console.log(trial.required, 'trial required');
+      if(!val.length && trial.required) {
+
         var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
         display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">*please select at least one option!</span>';
       } else {
