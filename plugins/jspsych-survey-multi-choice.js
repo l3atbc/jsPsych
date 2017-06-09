@@ -51,7 +51,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         no_function: false,
         description: ''
       },
-      Horitzontal: {
+      horizontal: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'left',
+        no_function: false,
+        description: ''
+      },
+      alignment: {
         type: [jsPsych.plugins.parameterType.BOOL],
         default: false,
         no_function: false,
@@ -62,7 +68,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         default: '',
         no_function: false,
         description: ''
-      }
+      },
+      superq: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }	
     }
   }
   plugin.trial = function(display_element, trial) {
@@ -75,9 +87,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
+      trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
-    trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+      trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+      trial.alignment = "left";
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -88,7 +102,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     var node = display_element.innerHTML += '<style id="jspsych-survey-multi-choice-css">';
     var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}"+
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align:"+trial.alignment+";}"+
       ".jspsych-survey-multi-choice-option { line-height: 2; }"+
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"+
       "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}"
@@ -103,6 +117,10 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
+    // show superq text
+    var superq_id_name = _join(plugin_id_name, 'superq');
+    trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+superq_id_name+'">'+trial.superq+'</div>';
+      
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
       // create question container
@@ -119,7 +137,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
-      for (var j = 0; j < trial.options[i].length; j++) {
+	for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
     
@@ -164,15 +182,19 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       // create object to hold responses
       var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
-      matches.forEach(function(match, index) {
-        if(match.querySelector("input[type=radio]:checked")) {
+      for(var i=0; i<matches.length; i++){
+        match = matches[i];
+        var id = "Q" + i;
+        if(match.querySelector("input[type=radio]:checked") !== null){
           var val = match.querySelector("input[type=radio]:checked").value;
-          var obje = {};
-          var id = 'answer'
-          obje[id] = val;
-          Object.assign(question_data, obje);
+        } else {
+          var val = "";
         }
-      })
+        var obje = {};
+        obje[id] = val;
+        Object.assign(question_data, obje);
+      }
+
 	var go_on = function(){
 	    display_element.innerHTML = ''; // clear the screen
             jsPsych.finishTrial(trial_data);
@@ -180,16 +202,16 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 	var answer_array = $.map(question_data, function(value, index) {
 	    return [value];
 	});
-	var correct = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
+	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
 	if (trial.correct[0]!=""){
 	    // provide feedback
-	    if (correct){
+	    if (iscorrect){
 		trial_form.innerHTML += '<div>Correct!</div>';		
 	    } else {
-		trial_form.innerHTML += '<div>Incorrect. Try again.</div>'
+		trial_form.innerHTML += '<div>Incorrect. Try again.</div>';
 	    };
 	};
-	if (correct || !trial.force_correct){
+	if (iscorrect || !trial.force_correct || trial.correct[0]==""){
 	    var trial_data = {
 	    "rt": response_time,
             "responses": JSON.stringify(question_data)

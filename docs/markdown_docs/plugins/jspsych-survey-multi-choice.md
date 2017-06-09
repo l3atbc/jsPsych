@@ -11,12 +11,14 @@ Parameter | Type | Default Value | Description
 questions | array | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (radio buttons). All questions will get presented on the same page (trial).
 options | array |  *undefined* | An array of arrays. The innermost arrays contain a set of options to display for an individual question. The length of the outer array should be the same as the number of questions.
 required | array | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
-horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
+horizontal | boolean | false | If true, then options are displayed horizontally. Alignment of the questions is set by the *alignment* parameter.
+alignment | string | left | Alignment of questions in horizontal mode (left, right, center).
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
-correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. The length of the array should be the same as the number of questions, and in the same order.
-force_correct | boolean | true | Require correct response before continuing? 
+superq | string | empty string | HTML formatted string to display after the preamble and before the questions
+correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. If value is `[""]`, no feedback is displayed and force_correct has no effect. Otherwise, the length of the array should be the same as the number of questions, and in the same order. 
+force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != [""]`.
 
-**Note**: If correct = [""], no feedback is provided and a correct response is not required. This allows the experimenter to flexibly provide feedback on some trials (e.g., practice trials) and not on others. 
+**Note**: If `correct = [""]`, no feedback is provided and a correct response is not required. This allows the experimenter to flexibly provide feedback on some trials (e.g., practice trials) and not on others. 
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 
