@@ -13,6 +13,10 @@ options | array |  *undefined* | An array of arrays. The innermost arrays contai
 required | array | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
+correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. The length of the array should be the same as the number of questions, and in the same order.
+force_correct | boolean | true | Require correct response before continuing? 
+
+**Note**: If correct = [""], no feedback is provided and a correct response is not required. This allows the experimenter to flexibly provide feedback on some trials (e.g., practice trials) and not on others. 
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 
@@ -42,6 +46,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
         questions: page_1_questions,
         options: [page_1_options, page_2_options],  // need one scale for every question on a page
         required: [true, false]   // set whether questions are required
+        correct: [""] // no feedback on this trial.
     };
 
     var multi_choice_block_horizontal = {
@@ -50,6 +55,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
         options: [page_1_options, page_2_options],  // need one scale for every question on a page
         required: [true, false],   // set whether questions are required
         horizontal: true  // centres questions and makes options display horizontally
+        correct: ["Strongly Agree", "Strongly Agree"] // subject cannot continue unless they really like vegetables and fruit
     };
 
     jsPsych.init({

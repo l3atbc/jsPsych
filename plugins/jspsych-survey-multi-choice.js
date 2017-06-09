@@ -30,6 +30,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         no_function: false,
         description: ''
       },
+      correct: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
       required: {
         type: [jsPsych.plugins.parameterType.BOOL],
         array: true,
@@ -37,7 +44,14 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         no_function: false,
         description: ''
       },
-      horitzontal: {
+      force_correct: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        array: false,
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      Horitzontal: {
         type: [jsPsych.plugins.parameterType.BOOL],
         default: false,
         no_function: false,
@@ -62,6 +76,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
+    trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
     trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
 
     // if any trial variables are functions
@@ -69,7 +84,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // inject CSS for trial
+     // inject CSS for trial
     var node = display_element.innerHTML += '<style id="jspsych-survey-multi-choice-css">';
     var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
@@ -158,15 +173,34 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
           Object.assign(question_data, obje);
         }
       })
-      // save data
-      var trial_data = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
-      };
-      display_element.innerHTML = '';
-    
-      // next trial
-      jsPsych.finishTrial(trial_data);
+	var go_on = function(){
+	    display_element.innerHTML = ''; // clear the screen
+            jsPsych.finishTrial(trial_data);
+	}
+	var answer_array = $.map(question_data, function(value, index) {
+	    return [value];
+	});
+	var correct = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
+	if (trial.correct[0]!=""){
+	    // provide feedback
+	    if (correct){
+		trial_form.innerHTML += '<div>Correct!</div>';		
+	    } else {
+		trial_form.innerHTML += '<div>Incorrect. Try again.</div>'
+	    };
+	};
+	if (correct || !trial.force_correct){
+	    var trial_data = {
+	    "rt": response_time,
+            "responses": JSON.stringify(question_data)
+	    };
+	    // next trial
+	    if (trial.correct[0]!=""){
+	        setTimeout(go_on,1000); // display feedback for 1 sec
+	    } else {
+		go_on() //no feedback, so go right on
+	    };
+ 	 };
     });
     
     var startTime = (new Date()).getTime();
