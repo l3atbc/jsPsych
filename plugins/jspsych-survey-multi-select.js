@@ -43,12 +43,24 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         no_function: false,
         description: ''
       },
+      alignment: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
       preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
         no_function: false,
         description: ''
-      }
+      },
+      superq: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }	
     }
   }
   plugin.trial = function(display_element, trial) {
@@ -63,6 +75,8 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
+    trial.alignment = "left";
+    trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -73,7 +87,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     var node = display_element.innerHTML += '<style id="jspsych-survey-multi-select-css">';
     var cssstr = ".jspsych-survey-multi-select-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-select-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-text {  text-align: center;}"+
+      ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-text {  text-align:"+trial.alignment+";}"+
       ".jspsych-survey-multi-select-option { line-height: 2; }"+
       ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"+
       "label.jspsych-survey-multi-select-text input[type='checkbox'] {margin-right: 1em;}"
@@ -88,6 +102,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
+    // show superq text
+    var superq_id_name = _join(plugin_id_name, 'superq');
+    trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+superq_id_name+'">'+trial.superq+'</div>';
+      
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
       // create question container
