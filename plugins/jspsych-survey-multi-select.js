@@ -175,12 +175,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       // create object to hold responses
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       var question_data = {};
-      var val = [];
-      matches.forEach(function(match, index) {
-        var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
-        inputboxes.forEach(currentChecked => {
-          val.push(currentChecked.value)
-        })
+	matches.forEach(function(match, index) {
+	    var val = [];
+            var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
+            inputboxes.forEach(currentChecked => {
+		val.push(currentChecked.value)
+            })
         var id = 'Q' + index
         var obje = {};
         obje[id] = val;
@@ -196,7 +196,6 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 	    return [value];
 	});
 	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
-	trial_form.innerHTML += answer_array;
 	if (trial.correct[0]!=""){
 	    // provide feedback
 	    if (iscorrect){
