@@ -91,6 +91,8 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
     trial.alignment = "left";
     trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
+    trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
+
 
     // if any trial variables are functions
     // this evaluates the function and replaces
