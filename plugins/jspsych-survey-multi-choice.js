@@ -208,7 +208,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 	    if (iscorrect){
 		trial_form.innerHTML += '<div>Correct!</div>';		
 	    } else {
-		trial_form.innerHTML += '<div>Incorrect. Try again.</div>';
+		trial_form.innerHTML += '</br>Incorrect. ';
+		if (trial.force_correct){trial_form.innerHTML += 'Try again.';};
 	    };
 	};
 	if (iscorrect || !trial.force_correct || trial.correct[0]==""){
