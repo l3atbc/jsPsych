@@ -30,6 +30,13 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         no_function: false,
         description: ''
       },
+      correct: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
       required: {
         type: [jsPsych.plugins.parameterType.BOOL],
         array: true,
@@ -121,12 +128,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + trial.questions[i] + '</p>';
 
-      // create option radio buttons
+      // create option checkboxes
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
     
-        // add radio button container
+        // add checkbox container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
     
         // add label and question text
@@ -170,22 +177,37 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         obje[id] = val;
         Object.assign(question_data, obje);
       })
-      console.log(trial.required, 'trial required');
-      if(!val.length && trial.required[0]) {
-
-        var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
-        display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">*please select at least one option!</span>';
-      } else {
-        // save data
-        var trial_data = {
-          "rt": response_time,
-          "responses": JSON.stringify(question_data)
-        };
-        display_element.innerHTML = '';
-        
-        // next trial
-        jsPsych.finishTrial(trial_data);
-      }
+	console.log(trial.required, 'trial required');
+	
+	var go_on = function(){
+	    display_element.innerHTML = ''; // clear the screen
+            jsPsych.finishTrial(trial_data);
+	}
+	var answer_array = $.map(question_data, function(value, index) {
+	    return [value];
+	});
+	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
+	trial_form.innerHTML += answer_array;
+	if (trial.correct[0]!=""){
+	    // provide feedback
+	    if (iscorrect){
+		trial_form.innerHTML += '<div>Correct!</div>';		
+	    } else {
+		trial_form.innerHTML += '<div>Incorrect. Try again.</div>';
+	    };
+	};
+	if (iscorrect || !trial.force_correct || trial.correct[0]==""){
+	    var trial_data = {
+	    "rt": response_time,
+            "responses": JSON.stringify(question_data)
+	    };
+	    // next trial
+	    if (trial.correct[0]!=""){
+	        setTimeout(go_on,1000); // display feedback for 1 sec
+	    } else {
+		go_on() //no feedback, so go right on
+	    };
+ 	 };
     });
     
     var startTime = (new Date()).getTime();
