@@ -10,7 +10,7 @@
 
 
 jsPsych.plugins['survey-multi-select'] = (function() {
-  var plugin = {};
+    var plugin = {};
 
   plugin.info = {
     name: 'survey-multi-select',
@@ -62,7 +62,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
-    trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+    trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
 
     // if any trial variables are functions
     // this evaluates the function and replaces

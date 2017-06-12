@@ -90,7 +90,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
-      trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+      trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
       trial.alignment = "left";
 
     // if any trial variables are functions
