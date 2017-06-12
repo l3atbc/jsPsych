@@ -15,6 +15,7 @@ horizontal | boolean | false | If true, then questions are centered and options 
 alignment | string | left | Alignment of questions in horizontal mode (left, right, center).
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
 correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. If value is `[""]`, no feedback is displayed and force_correct has no effect. Otherwise, the length of the array should be the same as the number of questions, and in the same order. 
+force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != [""]`.
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 

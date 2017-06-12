@@ -62,6 +62,13 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         no_function: false,
         description: ''
       },
+      force_correct: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        array: false,
+        default: false,
+        no_function: false,
+        description: ''
+      },
       superq: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
