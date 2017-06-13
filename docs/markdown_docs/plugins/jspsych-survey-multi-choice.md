@@ -15,10 +15,8 @@ horizontal | boolean | false | If true, then options are displayed horizontally.
 alignment | string | left | Alignment of questions in horizontal mode (left, right, center).
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
 superq | string | empty string | HTML formatted string to display after the preamble and before the questions
-correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. If value is `[""]`, no feedback is displayed and force_correct has no effect. Otherwise, the length of the array should be the same as the number of questions, and in the same order. 
-force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != [""]`.
-
-**Note**: If `correct = [""]`, no feedback is provided and a correct response is not required. This allows the experimenter to flexibly provide feedback on some trials (e.g., practice trials) and not on others. 
+correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. If value is `["NA"]`, no feedback is displayed and force_correct has no effect. Otherwise, the length of the array should be the same as the number of questions, and in the same order. 
+force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != ["NA"]`.
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 

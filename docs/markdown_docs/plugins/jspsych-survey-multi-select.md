@@ -14,8 +14,8 @@ required | array | null | An array of boolean values. Each boolean indicates if 
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
 alignment | string | left | Alignment of questions in horizontal mode (left, right, center).
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
-correct | array | *undefined* | An array of strings. The strings are the correct answers associated with each question. If value is `[""]`, no feedback is displayed and force_correct has no effect. Otherwise, the length of the array should be the same as the number of questions, and in the same order. 
-force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != [""]`.
+correct | array | *undefined* | An array of arrays of strings. The strings are the correct answers associated with each subquestion. There must be as many interior arrays as there are subquestions, and in the same order. If value is `[["NA"]]`, no feedback is displayed and force_correct has no effect. If the value of an interior array is []. 
+force_correct | boolean | true | Require correct response before continuing? Only applies if `correct != [["NA"]]`.
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 
