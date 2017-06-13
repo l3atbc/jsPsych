@@ -90,7 +90,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
     trial.alignment = "left";
-    trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
+    trial.superq = typeof trial.superq == 'undefined' ? false : trial.superq; //will make conditional work later
     trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
 
 
@@ -119,8 +119,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
     // show superq text
-    var superq_id_name = _join(plugin_id_name, 'superq');
-    trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+superq_id_name+'">'+trial.superq+'</div>';
+      if (trial.superq){
+        var superq_id_name = _join(plugin_id_name, 'superq');
+          trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+preamble_id_name+'">'+trial.superq+'</div>';
+      }
       
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
@@ -196,7 +198,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 	    return [value];
 	});
 	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
-	if (trial.correct[0]!=""){
+	if (trial.correct[0]!="NA"){
 	    // provide feedback
 	    if (iscorrect){
 		trial_form.innerHTML += '<div>Correct!</div>';		
@@ -205,13 +207,13 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 		if (trial.force_correct){trial_form.innerHTML += 'Try again.';};
 	    };
 	};
-	if (iscorrect || !trial.force_correct || trial.correct[0]==""){
+	if (iscorrect || !trial.force_correct || trial.correct[0]=="NA"){
 	    var trial_data = {
 	    "rt": response_time,
             "responses": JSON.stringify(question_data)
 	    };
 	    // next trial
-	    if (trial.correct[0]!=""){
+	    if (trial.correct[0]!="NA"){
 	        setTimeout(go_on,1000); // display feedback for 1 sec
 	    } else {
 		go_on() //no feedback, so go right on

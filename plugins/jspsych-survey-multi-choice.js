@@ -87,7 +87,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-      trial.superq = typeof trial.superq == 'undefined' ? "" : trial.superq;
+      trial.superq = typeof trial.superq == 'undefined' ? false : trial.superq;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.force_correct = typeof trial.force_correct == 'undefined' ? true : trial.force_correct;
       trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
@@ -117,9 +117,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
-    // show superq text
-    var superq_id_name = _join(plugin_id_name, 'superq');
-    trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+superq_id_name+'">'+trial.superq+'</div>';
+      // show superq text
+      if (trial.superq){
+        var superq_id_name = _join(plugin_id_name, 'superq');
+          trial_form.innerHTML += '<div id="'+superq_id_name+'" class="'+preamble_id_name+'">'+trial.superq+'</div>';
+      }
       
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
@@ -161,7 +163,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         form.appendChild(label)
       }
 
-      if (trial.required && trial.required[i]) {
+	if (trial.required && trial.required[i] && trial.correct[i]!="NA" && (i<(trial.questions.length-1) || trial.questions.length==1)) {
+        // if multiple questions, the last one is always the can't tell group, so it shouldn't be required
         var hey = question_selector + " p"
         // add "question required" asterisk
         display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
@@ -203,7 +206,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 	    return [value];
 	});
 	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
-	if (trial.correct[0]!=""){
+	if (trial.correct[0]!="NA"){
 	    // provide feedback
 	    if (iscorrect){
 		trial_form.innerHTML += '<div>Correct!</div>';		
@@ -212,13 +215,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 		if (trial.force_correct){trial_form.innerHTML += 'Try again.';};
 	    };
 	};
-	if (iscorrect || !trial.force_correct || trial.correct[0]==""){
+	if (iscorrect || !trial.force_correct || trial.correct[0]=="NA"){
 	    var trial_data = {
 	    "rt": response_time,
             "responses": JSON.stringify(question_data)
 	    };
 	    // next trial
-	    if (trial.correct[0]!=""){
+	    if (trial.correct[0]!="NA"){
 	        setTimeout(go_on,1000); // display feedback for 1 sec
 	    } else {
 		go_on() //no feedback, so go right on
