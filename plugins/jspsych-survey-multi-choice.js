@@ -186,15 +186,17 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       for(var i=0; i<matches.length; i++){
-        match = matches[i];
-        var id = "Q" + i;
+          match = matches[i];
+        var obje = {};
+	var qid = "Q" + i;
+	  obje[qid] = trial.questions[i];  
+        var aid = "A" + i;
         if(match.querySelector("input[type=radio]:checked") !== null){
           var val = match.querySelector("input[type=radio]:checked").value;
         } else {
           var val = "";
         }
-        var obje = {};
-        obje[id] = val;
+        obje[aid] = val;
         Object.assign(question_data, obje);
       }
 
@@ -217,8 +219,10 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 	};
 	if (iscorrect || !trial.force_correct || trial.correct[0]=="NA"){
 	    var trial_data = {
-	    "rt": response_time,
-            "responses": JSON.stringify(question_data)
+		"rt": response_time,
+		"preamble": trial.preamble,
+		"superq": trial.superq,
+		"responses": JSON.stringify(question_data)
 	    };
 	    // next trial
 	    if (trial.correct[0]!="NA"){

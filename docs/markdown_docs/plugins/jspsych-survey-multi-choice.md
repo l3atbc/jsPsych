@@ -26,8 +26,10 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-responses | JSON string | A string in JSON format containing the response for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as the name of the option label.
+responses | JSON string | An array containing the prompt and response in JSON format for each sub-question. The encoded object will have a separate variable for the prompt and response to each sub-question, with the first question in the trial being recorded in `A0` and the answer as `Q0`, the second in `Q1` and `A1`, and so on. The responses are recorded as the name of the option label.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.
+preamble | string | The preamble for the question.
+superq | string | The super-queestion for the question.
 
 ## Examples
 
