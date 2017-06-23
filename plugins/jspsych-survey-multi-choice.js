@@ -207,7 +207,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 	var answer_array = $.map(question_data, function(value, index) {
 	    return [value];
 	});
-	var iscorrect = JSON.stringify(answer_array) == JSON.stringify(trial.correct)
+  console.log(question_data);
+	var iscorrect = JSON.stringify(answer_array[1]) == JSON.stringify(trial.correct[0]);
 	if (trial.correct[0]!="NA"){
 	    // provide feedback
 	    if (iscorrect){
