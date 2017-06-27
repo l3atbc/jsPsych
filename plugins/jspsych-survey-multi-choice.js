@@ -167,7 +167,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         // if multiple questions, the last one is always the can't tell group, so it shouldn't be required
         var hey = question_selector + " p"
         // add "question required" asterisk
-        display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
+        display_element.querySelector(question_selector + " p").innerHTML;
     
         // add required property
         display_element.querySelector(question_selector + " input[type=radio]").required = true;
